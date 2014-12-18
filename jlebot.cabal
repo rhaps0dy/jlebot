@@ -29,13 +29,10 @@ executable jlebot
                      , network
                      , time
                      , directory
-                     -- , hint
                      , random
-                     -- , mueval
                      , deepseq
                      , pureMD5
                      , text
-                     , pokemon
                      , MonadRandom
                      , monad-loops
   hs-source-dirs:      src

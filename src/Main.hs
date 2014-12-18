@@ -20,29 +20,24 @@ import Prelude hiding            (mapM_, sequence, foldr, concat, elem)
 import System.Environment
 import Types
 import qualified Data.Map.Strict as M
-
-stateFile :: FilePath
-stateFile = "data/state"
+import Config
 
 main :: IO ()
 main = do
     modes <- getArgs
     -- when ("reset" `elem` modes) (removeFile stateFile)
     if "irc" `elem` modes
-      then ircLoop "data/state_irc" myAuto
-      else stdinLoop "data/state_stdin" myAuto
+      then ircLoop (stateDir ++ "state_irc") myAuto
+      else stdinLoop (stateDir ++ "state_stdin") myAuto
 
 myAuto :: MonadIO m => Interact m
 myAuto = mconcat [ saveIt "count"   $ i' countAuto
                  , i' pollAuto
                  , saveIt "greet"   $ i' greetAuto
                  , saveIt "karma"   $ i' karmaAuto
-                 -- , i' haskAuto
-                 , lambdabotAuto
                  , i' reconAuto
                  , i' askAuto
                  , i' censorAuto
-                 , i' pokeAuto
                  , i' dogeAuto
                  , i' helpAuto
                  , i' keywordAuto
@@ -53,7 +48,7 @@ myAuto = mconcat [ saveIt "count"   $ i' countAuto
                  ]
 
 saveIt :: MonadIO m => FilePath -> Auto m a b -> Auto m a b
-saveIt fp = savingAuto ("data/saving/" ++ fp ++ ".dat")
+saveIt fp = savingAuto (stateDir ++ "saving/" ++ fp ++ ".dat")
 -- saveIt fp = id
 
 i' :: Monad m => Interact' m -> Interact m

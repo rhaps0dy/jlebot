@@ -45,4 +45,5 @@ reps = [ ("fuck"   , "intercourse")
        , ("wow"    , "WOW")
        -- , ("hell"  , "florida")
        , ("fack"   , "intarcourse")
+       , ("fug"   , "hug")
        ]

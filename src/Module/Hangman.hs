@@ -22,6 +22,7 @@ import Prelude hiding            ((.), id)
 import System.Random
 import Types
 import qualified Data.Map.Strict as M
+import qualified Config as Cfg
 
 maxWrong :: Int
 maxWrong = 10
@@ -46,7 +47,7 @@ data Puzzle = Puzzle { _puzzleStr    :: String
                      } deriving (Show, Eq)
 
 loadWords :: IO [String]
-loadWords = filter ((> 9) . length) . filter (all isAlpha) . lines <$> readFile "/usr/share/dict/american-english"
+loadWords = filter ((> 9) . length) . filter (all isAlpha) . lines <$> readFile Cfg.dictFile
 
 hangmanAuto :: MonadIO m => Interact m
 hangmanAuto = proc im@(InMessage _ _ src _) -> do

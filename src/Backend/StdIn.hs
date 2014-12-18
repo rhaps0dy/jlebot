@@ -8,12 +8,13 @@ import Data.Time
 import Prelude hiding         (mapM_)
 import System.IO
 import Types
+import qualified Config       as Cfg
 
 stdinLoop :: MonadIO m => FilePath -> Interact m -> m ()
 stdinLoop fp a0 = do
     a  <- liftIO $ loadAutoFile fp a0
     a' <- loopAuto a
-    liftIO $ writeAutoFile "data/state" a'
+    liftIO $ writeAutoFile Cfg.stateFile a'
 
 loopAuto :: MonadIO m => Interact m -> m (Interact m)
 loopAuto a' = do
@@ -24,7 +25,7 @@ loopAuto a' = do
     case inp of
       Right inp' -> do
         t        <- liftIO getCurrentTime
-        (out, a) <- stepAuto a' (InMessage "justin" inp' "" t)
+        (out, a) <- stepAuto a' (InMessage Cfg.owner inp' "" t)
         liftIO    $ (mapM_ . mapM_) putStrLn (outMessageMap out)
         loopAuto a
       Left _ -> return a'

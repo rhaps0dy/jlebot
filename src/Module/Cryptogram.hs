@@ -27,6 +27,7 @@ import Text.Parsec hiding        ((<|>), many, optional)
 import Text.Parsec.String
 import Types
 import qualified Data.Map.Strict as M
+import qualified Config as Cfg
 
 takebackLimit :: Int
 takebackLimit = 4
@@ -81,7 +82,7 @@ loadPhrases :: IO [String]
 loadPhrases = map unlines
             . splitOn "%"
             . lines
-          <$> readFile "/usr/share/games/fortunes/fortunes"
+          <$> readFile Cfg.fortunesFile
   where
     splitOn str = go [] []
       where

@@ -16,10 +16,11 @@ import Prelude hiding                  (mapM_)
 import Types
 import qualified Data.ByteString.Char8 as C8
 import qualified Data.Map.Strict       as M
+import qualified Config                as Cfg
 
 ircConf :: MVar (Interact IO) -> IrcConfig
-ircConf a = (mkDefaultConfig "irc.freenode.org" "jlebot")
-              { cChannels = ["#jlebot-test","#ucsd","#jlebot-abuss"]
+ircConf a = (mkDefaultConfig Cfg.network Cfg.nick)
+              { cChannels = Cfg.channels
               , cEvents   = [Privmsg (onMessage a)]
               }
 
@@ -38,7 +39,7 @@ ircLoop :: FilePath -> Interact IO -> IO ()
 ircLoop fp a0 = do
     amvr <- newMVar =<< loadAutoFile fp a0
     catch (launchIRC amvr) $ \(_ :: AsyncException) ->
-      withMVar amvr (writeAutoFile "data/state")
+      withMVar amvr (writeAutoFile Cfg.stateFile)
     return ()
 
 onMessage :: MVar (Interact IO) -> EventFunc

@@ -18,9 +18,10 @@ import Auto
 import Control.Arrow
 import qualified Data.ByteString.Lazy as B
 import Control.Monad.IO.Class
+import qualified Config as Cfg
 
 loadWords :: IO [String]
-loadWords = (map . map) toLower . lines <$> readFile "/usr/share/dict/american-english"
+loadWords = (map . map) toLower . lines <$> readFile Cfg.dictFile
 
 dogeAuto :: MonadIO m => Interact' m
 dogeAuto = proc im -> do
